@@ -1,0 +1,281 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.animation.*?>
+<?import javafx.util.Duration?>
+
+<BorderPane fx:id="rootPane"
+            fx:controller="ecocam.project_chat_console.controller.ChatController"
+            xmlns="http://javafx.com/javafx/17"
+            xmlns:fx="http://javafx.com/fxml/1"
+            styleClass="root">
+
+    <top>
+        <HBox spacing="16" alignment="CENTER_LEFT" styleClass="top-bar">
+            <padding>
+                <Insets top="12" bottom="12" left="20" right="20"/>
+            </padding>
+
+            <HBox spacing="10" alignment="CENTER_LEFT" styleClass="logo-container">
+                <StackPane styleClass="logo-icon-container">
+                    <Circle radius="18" styleClass="logo-bg"/>
+                    <Label text="💬" styleClass="header-icon"/>
+                </StackPane>
+                <VBox spacing="0" alignment="CENTER_LEFT">
+                    <Label text="HyperChat" styleClass="chat-room-title"/>
+                    <Label fx:id="connectionStatusLabel" text="Connected" styleClass="connection-status"/>
+                </VBox>
+            </HBox>
+
+            <Region HBox.hgrow="ALWAYS"/>
+
+            <HBox spacing="10" alignment="CENTER" styleClass="status-container">
+                <StackPane styleClass="status-indicator-container">
+                    <Circle radius="6" styleClass="status-pulse-ring"/>
+                    <Circle radius="4" styleClass="status-dot-online"/>
+                </StackPane>
+                <Label fx:id="headerIconLabel" text="🌐" styleClass="header-status-icon"/>
+                <Label fx:id="activeUsersLabel" text="• 0 online" styleClass="active-users-text"/>
+            </HBox>
+
+            <Region HBox.hgrow="ALWAYS"/>
+
+            <HBox spacing="10" alignment="CENTER_LEFT" styleClass="user-mini-card">
+                <StackPane styleClass="avatar-container">
+                    <Circle radius="18" styleClass="avatar-circle"/>
+                    <Circle radius="18" styleClass="avatar-glow"/>
+                    <Label fx:id="miniAvatarLabel" text="U" styleClass="mini-avatar"/>
+                    <StackPane styleClass="status-badge-container" alignment="BOTTOM_RIGHT">
+                        <Circle radius="5" styleClass="online-badge"/>
+                    </StackPane>
+                </StackPane>
+                <VBox spacing="1" alignment="CENTER_LEFT">
+                    <Label fx:id="topBarUserName" text="User" styleClass="user-name"/>
+                    <Label fx:id="topBarUserStatus" text="Online" styleClass="user-status"/>
+                </VBox>
+                <Button fx:id="userMenuDropdownBtn" text="▼" styleClass="dropdown-btn" onAction="#showUserMenu">
+                    <contextMenu>
+                        <ContextMenu fx:id="userContextMenu">
+                            <items>
+                                <MenuItem fx:id="menuLogoutItem" text="🚪 Logout" />
+                            </items>
+                        </ContextMenu>
+                    </contextMenu>
+                </Button>
+            </HBox>
+
+        </HBox>
+    </top>
+
+    <center>
+        <HBox spacing="0" styleClass="main-container">
+
+            <VBox fx:id="navSidebar" spacing="6" alignment="TOP_CENTER" minWidth="72" prefWidth="72" styleClass="left-sidebar">
+                <padding>
+                    <Insets top="12" bottom="12" left="8" right="8"/>
+                </padding>
+
+                <VBox spacing="4" alignment="CENTER">
+                    <Button fx:id="navPublicBtn" text="🌐" styleClass="nav-btn-active">
+                        <tooltip>
+                            <Tooltip text="Public Chat"/>
+                        </tooltip>
+                    </Button>
+                    <Label text="Public" styleClass="nav-label"/>
+                </VBox>
+
+
+                <Region VBox.vgrow="ALWAYS"/>
+
+                <Separator styleClass="sidebar-separator"/>
+
+                <VBox spacing="4" alignment="CENTER">
+                    <Button fx:id="logoutBtn" text="◀" styleClass="nav-btn">
+                        <tooltip>
+                            <Tooltip text="Logout / Settings"/>
+                        </tooltip>
+                    </Button>
+                    <Label text="Logout" styleClass="nav-label"/>
+                </VBox>
+            </VBox>
+
+            <VBox fx:id="channelSidebar" spacing="10" minWidth="260" prefWidth="300" maxWidth="380" styleClass="channel-sidebar">
+                <padding>
+                    <Insets top="16" left="16" right="16" bottom="16"/>
+                </padding>
+
+                <Separator styleClass="sidebar-separator"/>
+
+                <VBox spacing="8" VBox.vgrow="ALWAYS">
+                    <HBox spacing="8" alignment="CENTER_LEFT">
+                        <Label text="ONLINE USERS" styleClass="section-title"/>
+                        <Region HBox.hgrow="ALWAYS"/>
+                        <HBox spacing="4" alignment="CENTER">
+                            <Circle radius="3" styleClass="online-dot"/>
+                            <Label fx:id="onlineUsersCount" text="0" styleClass="online-count"/>
+                        </HBox>
+                    </HBox>
+                    <ListView fx:id="onlineUsersList" styleClass="user-list" VBox.vgrow="ALWAYS"/>
+                    <ListView fx:id="groupListView" managed="false" visible="false"/>
+                </VBox>
+
+                <HBox spacing="12" alignment="CENTER_LEFT" styleClass="current-user-card">
+                    <StackPane styleClass="avatar-container-large">
+                        <Circle radius="22" styleClass="avatar-circle-large"/>
+                        <Circle radius="22" styleClass="avatar-glow-large"/>
+                        <Label fx:id="currentUserAvatarLabel" text="U" styleClass="avatar-initial-large"/>
+                        <StackPane styleClass="status-badge-container-large" alignment="BOTTOM_RIGHT">
+                            <Circle radius="6" styleClass="online-badge-large"/>
+                        </StackPane>
+                    </StackPane>
+                    <VBox spacing="1" alignment="CENTER_LEFT">
+                        <Label fx:id="currentUserDisplayName" text="User" styleClass="user-name"/>
+                        <Label fx:id="currentUserStatusLabel" text="Online" styleClass="user-status"/>
+                    </VBox>
+                </HBox>
+            </VBox>
+
+            <BorderPane fx:id="chatArea" HBox.hgrow="ALWAYS" styleClass="chat-center">
+
+                <top>
+                    <VBox styleClass="chat-header-container">
+                        <HBox spacing="16" alignment="CENTER_LEFT" styleClass="search-mode-bar">
+                            <padding>
+                                <Insets top="14" bottom="14" left="20" right="20"/>
+                            </padding>
+
+                            <HBox spacing="12" alignment="CENTER_LEFT">
+                                <StackPane styleClass="chat-mode-icon-container">
+                                    <Circle radius="20" styleClass="chat-mode-bg"/>
+                                    <Label fx:id="chatModeIcon" text="🌐" styleClass="chat-mode-icon"/>
+                                </StackPane>
+                                <VBox spacing="2" alignment="CENTER_LEFT">
+                                    <HBox spacing="8" alignment="CENTER_LEFT">
+                                        <Label fx:id="chatRoomLabel" text="Public Chat" styleClass="chat-room-title"/>
+                                        <Label fx:id="unreadBadge" text="0" visible="false" managed="false" styleClass="unread-badge"/>
+                                    </HBox>
+                                    <Label fx:id="chatRoomDesc" text="Chat with everyone" styleClass="chat-room-desc"/>
+                                </VBox>
+                            </HBox>
+
+                            <Button fx:id="clearRecipientBtn" visible="false" managed="false"/>
+
+                            <Region HBox.hgrow="ALWAYS"/>
+                        </HBox>
+
+                        <HBox fx:id="typingBar" visible="false" managed="false" spacing="8" alignment="CENTER_LEFT" styleClass="typing-bar">
+                            <padding>
+                                <Insets top="6" bottom="6" left="20" right="20"/>
+                            </padding>
+                            <HBox spacing="2" styleClass="typing-dots">
+                                <Circle radius="3" styleClass="typing-dot"/>
+                                <Circle radius="3" styleClass="typing-dot"/>
+                                <Circle radius="3" styleClass="typing-dot"/>
+                            </HBox>
+                            <Label fx:id="typingStatusLabel" text="Someone is typing..." styleClass="typing-indicator"/>
+                        </HBox>
+                    </VBox>
+                </top>
+
+                <center>
+                    <StackPane styleClass="messages-container">
+                        <ProgressIndicator fx:id="loadingIndicator" visible="false" managed="false" styleClass="loading-spinner"/>
+
+                        <VBox fx:id="emptyState" visible="false" managed="false" spacing="16" alignment="CENTER" styleClass="empty-state">
+                            <Label text="💬" styleClass="empty-icon"/>
+                            <Label text="No messages yet" styleClass="empty-title"/>
+                            <Label text="Start the conversation by sending a message" styleClass="empty-desc"/>
+                        </VBox>
+
+                        <ListView fx:id="messageListView" styleClass="message-list"/>
+
+                        <Button fx:id="scrollToBottomBtn" text="↓" visible="false" managed="false" styleClass="scroll-bottom-btn" StackPane.alignment="BOTTOM_RIGHT">
+                            <StackPane.margin>
+                                <Insets bottom="20" right="20"/>
+                            </StackPane.margin>
+                        </Button>
+                    </StackPane>
+                </center>
+
+                <bottom>
+                    <VBox spacing="0" styleClass="input-section">
+                        <VBox fx:id="replyPreview" visible="false" managed="false" spacing="8" styleClass="reply-preview">
+                            <padding>
+                                <Insets top="12" bottom="12" left="20" right="20"/>
+                            </padding>
+                            <HBox spacing="12" alignment="CENTER_LEFT">
+                                <VBox spacing="2" HBox.hgrow="ALWAYS">
+                                    <Label text="Replying to" styleClass="reply-label"/>
+                                    <Label fx:id="replyToLabel" text="Username" styleClass="reply-to-user"/>
+                                    <Label fx:id="replyTextLabel" text="Message preview..." styleClass="reply-text"/>
+                                </VBox>
+                                <Button fx:id="cancelReplyBtn" text="✕" styleClass="cancel-reply-btn"/>
+                            </HBox>
+                        </VBox>
+
+                        <HBox spacing="8" alignment="CENTER_LEFT" styleClass="reactions-bar">
+                            <padding>
+                                <Insets top="10" bottom="10" left="20" right="20"/>
+                            </padding>
+                            <Label text="Quick react:" styleClass="reactions-label"/>
+                            <HBox spacing="6" styleClass="reactions-container">
+                                <Button fx:id="reactionBtn1" text="👍" styleClass="reaction-btn"/>
+                                <Button fx:id="reactionBtn2" text="❤️" styleClass="reaction-btn"/>
+                                <Button fx:id="reactionBtn3" text="😂" styleClass="reaction-btn"/>
+                                <Button fx:id="reactionBtn4" text="🔥" styleClass="reaction-btn"/>
+                                <Button fx:id="reactionBtn5" text="🎉" styleClass="reaction-btn"/>
+                                <Button fx:id="reactionBtn6" text="👏" styleClass="reaction-btn"/>
+                            </HBox>
+                            <Region HBox.hgrow="ALWAYS"/>
+                            <Button fx:id="moreReactionsBtn" text="+" styleClass="more-reactions-btn"/>
+                        </HBox>
+
+                        <VBox fx:id="emojiPickerContainer" visible="false" managed="false" styleClass="emoji-picker-popup">
+                            <HBox spacing="12" alignment="CENTER_LEFT" styleClass="emoji-picker-header">
+                                <Label text="Emoji Picker" styleClass="emoji-picker-title"/>
+                                <Region HBox.hgrow="ALWAYS"/>
+                                <TextField fx:id="emojiSearchField" promptText="Search emoji..." styleClass="emoji-search-field"/>
+                                <Button fx:id="closeEmojiPickerBtn" text="✕" styleClass="close-btn"/>
+                            </HBox>
+                            <FlowPane fx:id="emojiGrid" styleClass="emoji-grid"/>
+                        </VBox>
+
+                        <HBox spacing="12" alignment="CENTER_LEFT" styleClass="input-bar">
+                            <padding>
+                                <Insets top="12" bottom="16" left="20" right="20"/>
+                            </padding>
+
+                            <HBox spacing="6" alignment="CENTER">
+                                <Button fx:id="attachFileBtn" text="📎" styleClass="icon-action-btn" onAction="#handleAttachFile">
+                                    <tooltip><Tooltip text="Attach file"/></tooltip>
+                                </Button>
+                                <Button fx:id="attachImageBtn" text="🖼" styleClass="icon-action-btn" onAction="#handleAttachImage">
+                                    <tooltip><Tooltip text="Attach image"/></tooltip>
+                                </Button>
+                            </HBox>
+
+                            <HBox HBox.hgrow="ALWAYS" spacing="8" alignment="CENTER_LEFT" styleClass="input-container">
+                                <TextField fx:id="messageInput" promptText="Type a message..." styleClass="message-input" HBox.hgrow="ALWAYS"/>
+                                <Button fx:id="emojiToggleBtn" text="😊" styleClass="input-emoji-btn">
+                                    <tooltip><Tooltip text="Open emoji picker"/></tooltip>
+                                </Button>
+                            </HBox>
+
+                            <Button fx:id="sendMessageBtn" text="➤" styleClass="send-btn">
+                                <tooltip><Tooltip text="Send message (Enter)"/></tooltip>
+                            </Button>
+                        </HBox>
+
+                        <HBox spacing="16" alignment="CENTER" styleClass="input-hints">
+                            <padding><Insets top="6" bottom="8"/></padding>
+                            <Label text="Enter to send • Shift+Enter for new line" styleClass="hint-text"/>
+                        </HBox>
+                    </VBox>
+                </bottom>
+            </BorderPane>
+        </HBox>
+    </center>
+</BorderPane>

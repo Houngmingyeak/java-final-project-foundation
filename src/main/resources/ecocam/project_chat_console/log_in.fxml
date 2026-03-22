@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.Circle?>
+
+<AnchorPane xmlns="http://javafx.com/javafx/17"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="ecocam.project_chat_console.controller.LoginController"
+            prefHeight="700.0" prefWidth="1000.0"
+            styleClass="auth-root">
+
+    <StackPane styleClass="auth-background" AnchorPane.topAnchor="0.0" AnchorPane.bottomAnchor="0.0"
+               AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+        <VBox styleClass="auth-pattern"/>
+    </StackPane>
+
+    <HBox alignment="CENTER" spacing="0" AnchorPane.topAnchor="0.0" AnchorPane.bottomAnchor="0.0"
+          AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+
+        <VBox alignment="CENTER" spacing="24" styleClass="auth-branding" HBox.hgrow="ALWAYS">
+            <padding>
+                <Insets top="40" bottom="40" left="60" right="60"/>
+            </padding>
+            <StackPane styleClass="auth-logo-container">
+                <Circle radius="50" styleClass="auth-logo-bg"/>
+                <Label text="💬" styleClass="auth-logo-icon"/>
+            </StackPane>
+            <VBox spacing="12" alignment="CENTER">
+                <Label text="HyperChat" styleClass="auth-brand-title"/>
+                <Label text="Connect. Communicate. Collaborate." styleClass="auth-brand-subtitle"/>
+            </VBox>
+            <VBox spacing="16" alignment="CENTER_LEFT" styleClass="auth-features">
+                <HBox spacing="12" alignment="CENTER_LEFT">
+                    <StackPane styleClass="auth-feature-icon-container">
+                        <Circle radius="12" styleClass="auth-feature-icon-bg"/>
+                        <Label text="✓" styleClass="auth-feature-icon"/>
+                    </StackPane>
+                    <Label text="Real-time messaging" styleClass="auth-feature-text"/>
+                </HBox>
+                <HBox spacing="12" alignment="CENTER_LEFT">
+                    <StackPane styleClass="auth-feature-icon-container">
+                        <Circle radius="12" styleClass="auth-feature-icon-bg"/>
+                        <Label text="✓" styleClass="auth-feature-icon"/>
+                    </StackPane>
+                    <Label text="Group &amp; private chats" styleClass="auth-feature-text"/>
+                </HBox>
+                <HBox spacing="12" alignment="CENTER_LEFT">
+                    <StackPane styleClass="auth-feature-icon-container">
+                        <Circle radius="12" styleClass="auth-feature-icon-bg"/>
+                        <Label text="✓" styleClass="auth-feature-icon"/>
+                    </StackPane>
+                    <Label text="Secure &amp; encrypted" styleClass="auth-feature-text"/>
+                </HBox>
+            </VBox>
+        </VBox>
+
+        <ScrollPane fitToWidth="true" hbarPolicy="NEVER" styleClass="auth-scroll"
+                    HBox.hgrow="NEVER" prefWidth="480" minWidth="400">
+            <padding>
+                <Insets top="40" bottom="40" left="40" right="40"/>
+            </padding>
+
+            <VBox alignment="CENTER" spacing="0" styleClass="auth-form-wrapper">
+                <VBox spacing="24" styleClass="auth-card">
+                    <padding>
+                        <Insets top="40" bottom="40" left="40" right="40"/>
+                    </padding>
+
+                    <VBox spacing="8" alignment="CENTER">
+                        <Label text="Welcome Back" styleClass="auth-title"/>
+                        <Label text="Sign in to your HyperChat account" styleClass="auth-subtitle"/>
+                    </VBox>
+
+                    <VBox spacing="16">
+                        <Label text="ACCOUNT CREDENTIALS" styleClass="auth-section-title"/>
+
+                        <VBox spacing="6">
+                            <Label text="Username" styleClass="auth-label"/>
+                            <TextField fx:id="usernameField" promptText="Enter your username" styleClass="auth-input">
+                                <tooltip>
+                                    <Tooltip text="Your HyperChat username"/>
+                                </tooltip>
+                            </TextField>
+                        </VBox>
+
+                        <VBox spacing="6">
+                            <HBox alignment="CENTER_LEFT">
+                                <Label text="Password" styleClass="auth-label" HBox.hgrow="ALWAYS"/>
+                                <Hyperlink text="Forgot password?" styleClass="auth-forgot-link"/>
+                            </HBox>
+                            <PasswordField fx:id="passwordField" promptText="Enter your password" styleClass="auth-input">
+                                <tooltip>
+                                    <Tooltip text="Your account password"/>
+                                </tooltip>
+                            </PasswordField>
+                        </VBox>
+                    </VBox>
+
+                    <VBox fx:id="errorContainer" visible="false" managed="false" styleClass="auth-error-container">
+                        <HBox spacing="10" alignment="CENTER_LEFT">
+                            <Label text="⚠" styleClass="auth-error-icon"/>
+                            <Label fx:id="errorLabel" text="" wrapText="true" styleClass="auth-error-text"/>
+                        </HBox>
+                    </VBox>
+
+                    <Button fx:id="loginButton" text="Sign In" maxWidth="Infinity" styleClass="auth-primary-btn">
+                        <tooltip>
+                            <Tooltip text="Sign in to HyperChat"/>
+                        </tooltip>
+                    </Button>
+
+                    <HBox alignment="CENTER" spacing="8" styleClass="auth-footer">
+                        <Label text="Don't have an account?" styleClass="auth-footer-text"/>
+                        <Hyperlink fx:id="signUpButton" text="Create one" styleClass="auth-link"/>
+                    </HBox>
+                </VBox>
+                <Label text="© 2024 HyperChat. All rights reserved." styleClass="auth-copyright"/>
+            </VBox>
+        </ScrollPane>
+    </HBox>
+</AnchorPane>
